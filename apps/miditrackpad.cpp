@@ -272,7 +272,7 @@ int main(int argc, char** argv)
                     }
                 }
             }
-            // button release
+            // touch release
             else if (e.type == EV_KEY and e.code == BTN_TOUCH and e.value == 0)
             {
                 // reset pitch wheel (x-axis) to center

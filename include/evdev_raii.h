@@ -8,7 +8,7 @@
 #include <utility>
 #include <optional>
 
-// wraps evdev devices — which support absolute XYZ coordinates —  in RAII
+// wraps evdev devices in RAII
 class EvDev
 {
 public:
