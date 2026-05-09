@@ -22,8 +22,8 @@ cmake --build build
 
 Currently, the device's axes translate as follows:
 * x-axis is pitch bend
-* y-axis is cc1 (mod wheel)
-* z-axis (pressure) is channel aftertouch
+* y-axis is modulation (CC1)
+* z-axis is channel pressure (aftertouch)
 
 Command line flags permit tweaking:
 ```

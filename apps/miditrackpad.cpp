@@ -15,7 +15,7 @@
 // globals
 const char        MIDI_PITCH_BEND               = 0xE0;
 const char        MIDI_CONTROL_CHANGE           = 0xB0; // mod wheel (CC1)
-const char        MIDI_CHANNEL_AFTERTOUCH       = 0xD0;
+const char        MIDI_CHANNEL_PRESSURE         = 0xD0;
 const std::string evdev_device_directory        = "/dev/input/";
 std::atomic<bool> is_running                    = true;
 
@@ -253,21 +253,21 @@ int main(int argc, char** argv)
                         break;
                     }
 
-                    // translate normalized z coordinate (pressure) to midi channel aftertouch
+                    // translate normalized z coordinate (pressure) to midi channel pressure
                     case ABS_PRESSURE:
                     {
                         const auto z        = e.value;
                         const auto z_norm   = double(z) / z_max;
-                        const char chan_at  = z_norm * 127;
+                        const char cp       = z_norm * 127;
                         midi_device.write_short(
                                 PortMidi::Message(
                                     // status byte
-                                    MIDI_CHANNEL_AFTERTOUCH | MIDI_CHANNEL,
+                                    MIDI_CHANNEL_PRESSURE | MIDI_CHANNEL,
                                     // data1 byte
-                                    chan_at,
+                                    cp,
                                     // data2 byte (unused)
                                     0));
-                        // std::cout << "Z: " << z << " Z_NORM: " << z_norm << " ChanAt: " << static_cast<int>(chan_at) << std::endl; // DEBUG
+                        // std::cout << "Z: " << z << " Z_NORM: " << z_norm << " ChanPr: " << static_cast<int>(cp) << std::endl; // DEBUG
                         break;
                     }
                 }
@@ -286,16 +286,16 @@ int main(int argc, char** argv)
                             // data2 byte (upper 7 bits)
                             (pitch >> 7) & 0x7F));
 
-                // reset channel aftertouch (z-axis) to zero
+                // reset channel pressure (z-axis) to zero
                 // note, removing pressure necessarily resets this axis, therefore
                 // this is likely unnecessary
-                const char chan_at = 0;
+                const char cp = 0;
                 midi_device.write_short(
                         PortMidi::Message(
                             // status byte
-                            MIDI_CHANNEL_AFTERTOUCH | MIDI_CHANNEL,
+                            MIDI_CHANNEL_PRESSURE | MIDI_CHANNEL,
                             // data1 byte
-                            chan_at,
+                            cp,
                             // data2 byte (unused)
                             0));
             }
